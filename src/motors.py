@@ -54,7 +54,7 @@ class Motors():
 
         # PWM characteristics
         self.pwm = Adafruit_PCA9685.PCA9685()
-        self.pwm.set_pwm_freq(50)  # Hz
+        self.pwm.set_pwm_freq(1600)  # Hz
 
         self.steering_pwm_neutral = [None] * 6
 
