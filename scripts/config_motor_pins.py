@@ -3,7 +3,7 @@ import time
 from shutil import copyfile
 import os
 
-DRIVE_MOTOR, STEER_MOTOR = [0, 1]
+DRIVE_MOTOR, STEER_MOTOR, SHOVEL_MOTOR = [0, 1, 2]
 
 pos_names = {
     1: 'fl',
@@ -12,6 +12,8 @@ pos_names = {
     4: 'cr',
     5: 'rl',
     6: 'rr',
+    7: 'sl',
+    8: 'sr'
 }
 
 pin_dict = {
@@ -34,8 +36,9 @@ duty_cycle_1 = on_time_1/cycle
 duty_cycle_2 = on_time_2/cycle
 
 # The PCA 9685 board requests a 12 bit number for the duty_cycle
-value_1 = 200 #int(duty_cycle_1*4096.0)
-value_2 = 400#int(duty_cycle_2*4096.0)
+value_1 = 200  # int(duty_cycle_1*4096.0)
+value_2 = 400  # int(duty_cycle_2*4096.0)
+
 
 class Motor():
     def __init__(self, pin):
@@ -68,6 +71,7 @@ class Motor():
 def print_exomy_layout():
     print(
         '''
+        7 sl-||-sr 8
         1 fl-||-fr 2
              ||
         3 cl-||-cr 4
@@ -142,8 +146,9 @@ All other controls will be explained in the process.
         while(1):
             print("Pin #{}".format(pin_number))
             print(
-                'Was it a steering or driving motor that moved, or should I repeat the movement? ')
-            type_selection = raw_input('(d)rive (s)teer (r)epeat - (n)one (f)inish_configuration\n')
+                'Was it a steering or driving or shovel motor that moved, or should I repeat the movement? ')
+            type_selection = raw_input(
+                '(d)rive (s)teer s(h)ovel (r)epeat - (n)one (f)inish_configuration\n')
             if(type_selection == 'd'):
                 motor.pin_name += 'drive_'
                 print('Good job\n')
@@ -151,7 +156,11 @@ All other controls will be explained in the process.
             elif(type_selection == 's'):
                 motor.pin_name += 'steer_'
                 print('Good job\n')
-                break                
+                break
+            elif(type_selection == 'h'):
+                motor.pin_name += 'shovel_'
+                print('Good job\n')
+                break
             elif(type_selection == 'r'):
                 print('Look closely\n')
                 motor.wiggle_motor()
@@ -163,50 +172,49 @@ All other controls will be explained in the process.
                 break
             else:
                 print('Input must be d, s, r, n or f\n')
-        
-        if (type_selection == 'd' or type_selection == 's'):
+
+        if (type_selection == 'd' or type_selection == 's' or type_selection == 'h'):
             while(1):
                 print_exomy_layout()
                 pos_selection = raw_input(
-                    'Type the position of the motor that moved.[1-6] or (r)epeat\n')
+                    'Type the position of the motor that moved.[1-8] or (r)epeat\n')
                 if(pos_selection == 'r'):
                     print('Look closely\n')
                 else:
                     try:
                         pos = int(pos_selection)
-                        if(pos >= 1 and pos <= 6):
+                        if(pos >= 1 and pos <= 8):
                             motor.pin_name += pos_names[pos]
                             break
                         else:
-                            print('The input was not a number between 1 and 6\n')
+                            print('The input was not a number between 1 and 8\n')
                     except ValueError:
-                        print('The input was not a number between 1 and 6\n')
-            
+                        print('The input was not a number between 1 and 8\n')
+
             pin_dict[motor.pin_name] = motor.pin_number
             print('Motor set!\n')
             print('########################################################\n')
         elif (type_selection == 'f'):
             break
-    
 
     print('Now we will step through all the motors and check whether they have been assigned correctly.\n')
     print('Press ctrl+c if something is wrong and start the script again. \n')
-    
+
     for pin_name in pin_dict:
         print('moving {}'.format(pin_name))
-        print_exomy_layout()        
-        
+        print_exomy_layout()
+
         pin = pin_dict[pin_name]
         motor = Motor(pin)
         motor.wiggle_motor()
         raw_input('Press button to continue')
-    
-    print("You assigned {}/12 motors.".format(len(pin_dict.keys())))
+
+    print("You assigned {}/14 motors.".format(len(pin_dict.keys())))
 
     print('Write to config file.\n')
     update_config_file()
     print(
-    '''
+        '''
     $$$$$$$$\ $$\           $$\           $$\                       $$\ 
     $$  _____|\__|          \__|          $$ |                      $$ |
     $$ |      $$\ $$$$$$$\  $$\  $$$$$$$\ $$$$$$$\   $$$$$$\   $$$$$$$ |
@@ -217,4 +225,3 @@ All other controls will be explained in the process.
     \__|      \__|\__|  \__|\__|\_______/ \__|  \__| \_______| \_______|
                                                                         
     ''')
-

@@ -48,3 +48,10 @@ drive_pwm_neutral_rr: 307
 
 # PWW range around driving neutral position
 drive_pwm_range: 100
+
+# PWM values for the neutral shovel position
+shovel_pwm_neutral_sl: 300
+shovel_pwm_neutral_sr: 300
+
+# PWW range around shovel neutral position
+shovel_pwm_range: 250

@@ -14,12 +14,13 @@ class Motors():
     '''
 
     # Define wheel names
-    FL, FR, CL, CR, RL, RR = range(0, 6)
+    FL, FR, CL, CR, RL, RR, SL, SR = range(0, 8)
 
     # Motor commands are assuming positiv=driving_forward, negative=driving_backwards.
     # The driving direction of the left side has to be inverted for this to apply to all wheels.
     wheel_directions = [-1, 1, -1, 1, -1, 1]
 
+    # 7 sl-||-sr 8
     # 1 fl-||-fr 2
     #      ||
     # 3 cl-||-cr 4
@@ -30,7 +31,8 @@ class Motors():
         # Dictionary containing the pins of all motors
         self.pins = {
             'drive': {},
-            'steer': {}
+            'steer': {},
+            'shovel': {}
         }
 
         # Set variables for the GPIO motor pins
@@ -51,6 +53,9 @@ class Motors():
 
         self.pins['drive'][self.RR] = rospy.get_param("pin_drive_rr")
         self.pins['steer'][self.RR] = rospy.get_param("pin_steer_rr")
+
+        self.pins['shovel'][self.SL] = rospy.get_param("pin_shovel_sl")
+        self.pins['shovel'][self.SR] = rospy.get_param("pin_shovel_sr")
 
         # PWM characteristics
         self.pwm = Adafruit_PCA9685.PCA9685()
@@ -80,6 +85,12 @@ class Motors():
         self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = rospy.get_param("drive_pwm_range")
 
+        self.shovel_pwm_neutral = [None] * 2
+
+        self.shovel_pwm_neutral[self.SL] = rospy.get_param("shovel_pwm_neutral_sl")
+        self.shovel_pwm_neutral[self.SR] = rospy.get_param("shovel_pwm_neutral_sr")
+        self.shovel_pwm_range = rospy.get_param("shovel_pwm_range")
+
         # Set steering motors to neutral values (straight)
         for wheel_name, motor_pin in self.pins['steer'].items():
             self.pwm.set_pwm(motor_pin, 0,
@@ -90,6 +101,12 @@ class Motors():
         for wheel_name, motor_pin in self.pins['drive'].items():
             self.pwm.set_pwm(motor_pin, 0,
                              self.driving_pwm_neutral[wheel_name])
+            time.sleep(0.1)
+
+        # Set shovel motors to neutral values
+        for motor_name, motor_pin in self.pins['shovel'].items():
+            self.pwm.set_pwm(motor_pin, 0,
+                             self.shovel_pwm_neutral[motor_name])
             time.sleep(0.1)
 
         self.wiggle()
@@ -128,6 +145,15 @@ class Motors():
         for wheel_name, motor_pin in self.pins['drive'].items():
             duty_cycle = int(self.driving_pwm_neutral[wheel_name] +
                              driving_command[wheel_name]/100.0 * self.driving_pwm_range * self.wheel_directions[wheel_name])
+
+            self.pwm.set_pwm(motor_pin, 0, duty_cycle)
+            self.pwm.set_pwm(motor_pin, 0, duty_cycle)
+
+    def setShovel(self, driving_command):
+        # Loop through pin dictionary. The items key is the motor_name and the value the pin.
+        for motor_name, motor_pin in self.pins['shovel'].items():
+            duty_cycle = int(self.shovel_pwm_neutral[motor_name] +
+                             driving_command[motor_name]/100.0 * self.driving_pwm_range * self.wheel_directions[motor_name])
 
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
 

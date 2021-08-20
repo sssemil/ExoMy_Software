@@ -12,6 +12,7 @@ global watchdog_timer
 def callback(cmds):
     motors.setSteering(cmds.motor_angles)
     motors.setDriving(cmds.motor_speeds)
+    motors.setShovel(cmds.motor_shovel)
 
     global watchdog_timer
     watchdog_timer.shutdown()
