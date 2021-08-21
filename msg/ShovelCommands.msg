@@ -1,1 +1,1 @@
-int64 shovel_angle
+float64 shovel_angle

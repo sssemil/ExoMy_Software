@@ -180,28 +180,27 @@ class Rover():
         return steering_angles
 
     def joystickToShovelAngle(self, shovel_angle):
+        print("joystickToShovelAngle:")
+        print(shovel_angle)
         '''
         Converts the steering command [angle of joystick] to angles for the different motors
 
-        :param int shovel_angle: Turning radius command with the values 0(left) +90(forward) -90(backward)  +-180(right)
+        shovel_angle in -1 to 1
         '''
 
-        shovel_angle = [0]*2
+        shovel_angle_arr = [0]*2
 
-        wheel_direction = 0
-        if(shovel_angle > 0):
-            wheel_direction = shovel_angle - 90
+        wheel_direction = shovel_angle*75
 
-        elif(shovel_angle <= 0):
-            wheel_direction = shovel_angle + 90
+        # wheel_direction = np.clip(wheel_direction, -75, 75)
 
-        wheel_direction = np.clip(wheel_direction, -75, 75)
-
-        shovel_angle[self.SL] = wheel_direction
-        shovel_angle[self.SR] = wheel_direction
+        shovel_angle_arr[self.SL] = wheel_direction
+        shovel_angle_arr[self.SR] = -wheel_direction
         # TODO: Inverse one
+        print("joystickToShovelAngle:")
+        print(str(shovel_angle_arr))
 
-        return shovel_angle
+        return shovel_angle_arr
 
     def joystickToVelocity(self, driving_command, steering_command):
         '''

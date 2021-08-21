@@ -2,7 +2,7 @@
 import time
 import rospy
 
-from exomy.msg import ShovelCommands
+from exomy.msg import ShovelMotorCommands
 from motors import Motors
 
 motors = Motors()
@@ -10,7 +10,9 @@ global watchdog_timer
 
 
 def callback(cmds):
-    motors.setShovel(cmds.motor_shovel)
+    print("got commands for shovel")
+
+    motors.setShovel(cmds.shovel_angles)
 
     global watchdog_timer
     watchdog_timer.shutdown()
@@ -38,7 +40,7 @@ if __name__ == "__main__":
     watchdog_timer = rospy.Timer(rospy.Duration(1.0), watchdog, oneshot=True)
 
     sub = rospy.Subscriber(
-        "/shovel_motor_commands", ShovelCommands, callback, queue_size=1)
+        "/shovel_motor_commands", ShovelMotorCommands, callback, queue_size=1)
 
     rate = rospy.Rate(10)
 

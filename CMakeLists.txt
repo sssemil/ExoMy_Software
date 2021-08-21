@@ -54,6 +54,7 @@ add_message_files(
       RoverCommand.msg
       MotorCommands.msg
       ShovelCommands.msg
+      ShovelMotorCommands.msg
       Screen.msg
   )
 ## Generate services in the 'srv' folder
