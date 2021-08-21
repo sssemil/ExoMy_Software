@@ -164,11 +164,11 @@ class Motors():
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
 
-    def setShovel(self, driving_command):
-        # Loop through pin dictionary. The items key is the motor_name and the value the pin.
+    def setShovel(self, shovel_command):
+        # Loop through pin dictionary. The items key is the shovel_name and the value the pin.
         for motor_name, motor_pin in self.pins['shovel'].items():
-            duty_cycle = int(self.shovel_pwm_neutral[motor_name] +
-                             driving_command[motor_name]/100.0 * self.driving_pwm_range * self.wheel_directions[motor_name])
+            duty_cycle = int(
+                self.steering_pwm_neutral[motor_name] + shovel_command[motor_name]/90.0 * self.steering_pwm_range)
 
             self.pwm.set_pwm(motor_pin, 0, duty_cycle)
 
