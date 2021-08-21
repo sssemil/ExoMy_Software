@@ -79,8 +79,58 @@
         console.log('End function called')
       });
     }
+
+    createJoystick2 = function () {
+      var options = {
+        zone: document.getElementById('joy_2_container'),
+        threshold: 0.1,
+        position: { left: '50%', top: '50%' },
+        mode: 'static',
+        size: 150,
+        color: 'black'
+      };
+      manager = nipplejs.create(options);
+
+      self.manager.on('start', function (event, nipple) {
+      });
+
+      self.manager.on('move', function (event, nipple) {
+        var max_distance = 75;
+        var x = -Math.cos(nipple.angle.radian) * nipple.distance / max_distance;
+        var y = Math.sin(nipple.angle.radian) * nipple.distance / max_distance;
+        axes = [x, y, 0, 0, 0, 0]
+
+        // nipplejs is triggering events when joystick moves each pixel
+        // we need delay between consecutive messege publications to 
+        // prevent system from being flooded by messages
+        // events triggered earlier than 50ms after last publication will be dropped 
+
+        if (publishImmidiately) {
+          publishImmidiately = false;
+          joy_2_event()
+          window.clearInterval(watchdog_handle)
+          watchdog_handle = window.setInterval(joy_2_event, 50)
+
+          setTimeout(function () {
+            publishImmidiately = true;
+          }, 50);
+        }
+        //joy_event()
+        //window.clearInterval()
+        //window.setInterval(joy_event, 500)
+      });
+
+      self.manager.on('end', function () {
+        window.clearInterval(watchdog_handle)
+        axes = [0, 0, 0, 0, 0, 0]
+        joy_2_event()
+        console.log('End function called')
+      });
+    }
+
     window.onload = function () {
       createJoystick();
+      createJoystick2();
       // Video output
       stream_url = '//' + host_url + ':8080/stream?topic=/pi_cam/image_raw';
       console.log(stream_url);
@@ -99,6 +149,22 @@
         buttons: buttons
       });
       joy_listener.publish(joy);
+      console.log(axes)
+      console.log(buttons)
+    }
+
+    joy_2_listener = new ROSLIB.Topic({
+      ros: ros,
+      name: "/joy2",
+      messageType: 'sensor_msgs/Joy2'
+    });
+
+    joy_2_event = function () {
+      var joy = new ROSLIB.Message({
+        axes: axes,
+        buttons: buttons
+      });
+      joy_2_listener.publish(joy);
       console.log(axes)
       console.log(buttons)
     }
@@ -124,6 +190,7 @@
     <div class="wrapper">
       <div class="left" id="left">
         <div class="joy_container" id="joy_container"></div>
+        <div class="joy_2_container" id="joy_2_container"></div>
       </div>
 
       <div class="middle" id="middle">

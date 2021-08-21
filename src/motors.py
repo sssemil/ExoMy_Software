@@ -15,6 +15,8 @@ class Motors():
 
     # Define wheel names
     FL, FR, CL, CR, RL, RR = range(0, 6)
+
+    # Define shovel motor names
     SL, SR = range(0, 2)
 
     # Motor commands are assuming positiv=driving_forward, negative=driving_backwards.

@@ -15,6 +15,9 @@ class Rover():
     # Defining wheel names
     FL, FR, CL, CR, RL, RR = range(0, 6)
 
+    # Define shovel motor names
+    SL, SR = range(0, 2)
+
     # Defining locomotion modes
     FAKE_ACKERMANN, ACKERMANN, POINT_TURN, CRABBING = range(0, 4)
 
