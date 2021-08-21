@@ -14,7 +14,7 @@ class Motors():
     '''
 
     # Define wheel names
-    FL, FR, CL, CR, RL, RR, SL, SR = range(0, 6)
+    FL, FR, CL, CR, RL, RR = range(0, 6)
     SL, SR = range(0, 2)
 
     # Motor commands are assuming positiv=driving_forward, negative=driving_backwards.
