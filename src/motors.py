@@ -14,7 +14,8 @@ class Motors():
     '''
 
     # Define wheel names
-    FL, FR, CL, CR, RL, RR, SL, SR = range(0, 8)
+    FL, FR, CL, CR, RL, RR, SL, SR = range(0, 6)
+    SL, SR = range(0, 2)
 
     # Motor commands are assuming positiv=driving_forward, negative=driving_backwards.
     # The driving direction of the left side has to be inverted for this to apply to all wheels.
@@ -63,32 +64,46 @@ class Motors():
 
         self.steering_pwm_neutral = [None] * 6
 
-        self.steering_pwm_neutral[self.FL] = rospy.get_param("steer_pwm_neutral_fl")
-        self.steering_pwm_neutral[self.FR] = rospy.get_param("steer_pwm_neutral_fr")
-        self.steering_pwm_neutral[self.CL] = rospy.get_param("steer_pwm_neutral_cl")
-        self.steering_pwm_neutral[self.CR] = rospy.get_param("steer_pwm_neutral_cr")
-        self.steering_pwm_neutral[self.RL] = rospy.get_param("steer_pwm_neutral_rl")
-        self.steering_pwm_neutral[self.RR] = rospy.get_param("steer_pwm_neutral_rr")
+        self.steering_pwm_neutral[self.FL] = rospy.get_param(
+            "steer_pwm_neutral_fl")
+        self.steering_pwm_neutral[self.FR] = rospy.get_param(
+            "steer_pwm_neutral_fr")
+        self.steering_pwm_neutral[self.CL] = rospy.get_param(
+            "steer_pwm_neutral_cl")
+        self.steering_pwm_neutral[self.CR] = rospy.get_param(
+            "steer_pwm_neutral_cr")
+        self.steering_pwm_neutral[self.RL] = rospy.get_param(
+            "steer_pwm_neutral_rl")
+        self.steering_pwm_neutral[self.RR] = rospy.get_param(
+            "steer_pwm_neutral_rr")
         self.steering_pwm_range = rospy.get_param("steer_pwm_range")
 
         self.driving_pwm_low_limit = 100
 
         self.driving_pwm_neutral = [None] * 6
 
-        self.driving_pwm_neutral[self.FL] = rospy.get_param("drive_pwm_neutral_fl")
-        self.driving_pwm_neutral[self.FR] = rospy.get_param("drive_pwm_neutral_fr")
-        self.driving_pwm_neutral[self.CL] = rospy.get_param("drive_pwm_neutral_cl")
-        self.driving_pwm_neutral[self.CR] = rospy.get_param("drive_pwm_neutral_cr")
-        self.driving_pwm_neutral[self.RL] = rospy.get_param("drive_pwm_neutral_rl")
-        self.driving_pwm_neutral[self.RR] = rospy.get_param("drive_pwm_neutral_rr")
+        self.driving_pwm_neutral[self.FL] = rospy.get_param(
+            "drive_pwm_neutral_fl")
+        self.driving_pwm_neutral[self.FR] = rospy.get_param(
+            "drive_pwm_neutral_fr")
+        self.driving_pwm_neutral[self.CL] = rospy.get_param(
+            "drive_pwm_neutral_cl")
+        self.driving_pwm_neutral[self.CR] = rospy.get_param(
+            "drive_pwm_neutral_cr")
+        self.driving_pwm_neutral[self.RL] = rospy.get_param(
+            "drive_pwm_neutral_rl")
+        self.driving_pwm_neutral[self.RR] = rospy.get_param(
+            "drive_pwm_neutral_rr")
 
         self.driving_pwm_upper_limit = 500
         self.driving_pwm_range = rospy.get_param("drive_pwm_range")
 
         self.shovel_pwm_neutral = [None] * 2
 
-        self.shovel_pwm_neutral[self.SL] = rospy.get_param("shovel_pwm_neutral_sl")
-        self.shovel_pwm_neutral[self.SR] = rospy.get_param("shovel_pwm_neutral_sr")
+        self.shovel_pwm_neutral[self.SL] = rospy.get_param(
+            "shovel_pwm_neutral_sl")
+        self.shovel_pwm_neutral[self.SR] = rospy.get_param(
+            "shovel_pwm_neutral_sr")
         self.shovel_pwm_range = rospy.get_param("shovel_pwm_range")
 
         # Set steering motors to neutral values (straight)
