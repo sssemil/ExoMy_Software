@@ -115,19 +115,19 @@ class Motors():
         # Set steering motors to neutral values (straight)
         for wheel_name, motor_pin in self.pins['steer'].items():
             self.set_pwm(motor_pin, 0,
-                             self.steering_pwm_neutral[wheel_name])
+                         self.steering_pwm_neutral[wheel_name])
             time.sleep(0.1)
 
         # Set driving motors to neutral values (stop)
         for wheel_name, motor_pin in self.pins['drive'].items():
             self.set_pwm(motor_pin, 0,
-                             self.driving_pwm_neutral[wheel_name])
+                         self.driving_pwm_neutral[wheel_name])
             time.sleep(0.1)
 
         # Set shovel motors to neutral values
         for motor_name, motor_pin in self.pins['shovel'].items():
             self.set_pwm(motor_pin, 0,
-                             self.shovel_pwm_neutral[motor_name])
+                         self.shovel_pwm_neutral[motor_name])
             time.sleep(0.1)
 
         self.wiggle()
@@ -135,22 +135,22 @@ class Motors():
     def wiggle(self):
         time.sleep(0.1)
         self.set_pwm(self.pins['steer'][self.FL], 0,
-                         int(self.steering_pwm_neutral[self.FL] + self.steering_pwm_range * 0.3))
+                     int(self.steering_pwm_neutral[self.FL] + self.steering_pwm_range * 0.3))
         time.sleep(0.1)
         self.set_pwm(self.pins['steer'][self.FR], 0,
-                         int(self.steering_pwm_neutral[self.FR] + self.steering_pwm_range * 0.3))
+                     int(self.steering_pwm_neutral[self.FR] + self.steering_pwm_range * 0.3))
         time.sleep(0.3)
         self.set_pwm(self.pins['steer'][self.FL], 0,
-                         int(self.steering_pwm_neutral[self.FL] - self.steering_pwm_range * 0.3))
+                     int(self.steering_pwm_neutral[self.FL] - self.steering_pwm_range * 0.3))
         time.sleep(0.1)
         self.set_pwm(self.pins['steer'][self.FR], 0,
-                         int(self.steering_pwm_neutral[self.FR] - self.steering_pwm_range * 0.3))
+                     int(self.steering_pwm_neutral[self.FR] - self.steering_pwm_range * 0.3))
         time.sleep(0.3)
         self.set_pwm(self.pins['steer'][self.FL], 0,
-                         int(self.steering_pwm_neutral[self.FL]))
+                     int(self.steering_pwm_neutral[self.FL]))
         time.sleep(0.1)
         self.set_pwm(self.pins['steer'][self.FR], 0,
-                         int(self.steering_pwm_neutral[self.FR]))
+                     int(self.steering_pwm_neutral[self.FR]))
         time.sleep(0.3)
 
     def setSteering(self, steering_command):
@@ -179,7 +179,7 @@ class Motors():
             print(motor_name)
             print(motor_pin)
             duty_cycle = int(
-                self.steering_pwm_neutral[motor_name] + shovel_command[motor_name]/90.0 * self.shovel_pwm_range)
+                self.shovel_pwm_neutral[motor_name] + shovel_command[motor_name]/100.0 * self.shovel_pwm_range)
 
             self.set_pwm(motor_pin, 0, duty_cycle)
 
