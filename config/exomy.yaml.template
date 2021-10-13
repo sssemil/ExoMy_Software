@@ -23,6 +23,9 @@ pin_steer_rl: 13
 pin_drive_rr: 3
 pin_steer_rr: 1
 
+pin_shovel_sl: 8
+pin_shovel_sr: 9
+
 ## PWM values
 # Those values highly depend on the motors and pwm board used
 # Check out the wiki for further explanation
@@ -48,3 +51,10 @@ drive_pwm_neutral_rr: 307
 
 # PWW range around driving neutral position
 drive_pwm_range: 100
+
+# PWM values for the neutral shovel position
+shovel_pwm_neutral_sl: 300
+shovel_pwm_neutral_sr: 300
+
+# PWW range around shovel neutral position
+shovel_pwm_range: 250

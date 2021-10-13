@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import time
-from exomy.msg import RoverCommand, MotorCommands, Screen
+from exomy.msg import RoverCommand, MotorCommands, Screen, ShovelCommands, ShovelMotorCommands
 import rospy
 from rover import Rover
 import message_filters
@@ -27,15 +27,30 @@ def joy_callback(message):
     robot_pub.publish(cmds)
 
 
+def joy_2_callback(message):
+    print("got commands for shovel 2")
+    print(str(message))
+
+    cmds = ShovelMotorCommands()
+
+    cmds.shovel_angles = exomy.joystickToShovelAngle(message.shovel_angle)
+
+    shovel_pub.publish(cmds)
+
+
 if __name__ == '__main__':
     rospy.init_node('robot_node')
     rospy.loginfo("Starting the robot node")
     global robot_pub
     joy_sub = rospy.Subscriber(
         "/rover_command", RoverCommand, joy_callback, queue_size=1)
+    joy2_sub = rospy.Subscriber(
+        "/shovel_command", ShovelCommands, joy_2_callback, queue_size=1)
 
     rate = rospy.Rate(10)
 
     robot_pub = rospy.Publisher("/motor_commands", MotorCommands, queue_size=1)
+    shovel_pub = rospy.Publisher(
+        "/shovel_motor_commands", ShovelMotorCommands, queue_size=1)
 
     rospy.spin()

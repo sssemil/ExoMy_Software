@@ -15,6 +15,9 @@ class Rover():
     # Defining wheel names
     FL, FR, CL, CR, RL, RR = range(0, 6)
 
+    # Define shovel motor names
+    SL, SR = range(0, 2)
+
     # Defining locomotion modes
     FAKE_ACKERMANN, ACKERMANN, POINT_TURN, CRABBING = range(0, 4)
 
@@ -175,6 +178,29 @@ class Rover():
                 steering_angles[self.RR] = wheel_direction
 
         return steering_angles
+
+    def joystickToShovelAngle(self, shovel_angle):
+        print("joystickToShovelAngle:")
+        print(shovel_angle)
+        '''
+        Converts the steering command [angle of joystick] to angles for the different motors
+
+        shovel_angle in -1 to 1
+        '''
+
+        shovel_angle_arr = [0]*2
+
+        wheel_direction = shovel_angle*75
+
+        # wheel_direction = np.clip(wheel_direction, -75, 75)
+
+        shovel_angle_arr[self.SL] = wheel_direction
+        shovel_angle_arr[self.SR] = -wheel_direction
+        # TODO: Inverse one
+        print("joystickToShovelAngle:")
+        print(str(shovel_angle_arr))
+
+        return shovel_angle_arr
 
     def joystickToVelocity(self, driving_command, steering_command):
         '''
